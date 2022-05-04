@@ -621,6 +621,32 @@ static void test_set_state_change_callback(void)
 }
 
 /**
+ * @brief Test bitrate limits.
+ */
+static void test_bitrate_limits(void)
+{
+	uint32_t min;
+	uint32_t max;
+	int err;
+
+	err = can_get_min_bitrate(can_dev, &min);
+	if (err == -ENOSYS) {
+		ztest_test_skip();
+	}
+
+	zassert_equal(err, 0, "failed to get min bitrate (err %d)", err);
+
+	err = can_get_max_bitrate(can_dev, &max);
+	if (err == -ENOSYS) {
+		ztest_test_skip();
+	}
+
+	zassert_equal(err, 0, "failed to get max bitrate (err %d)", err);
+
+	zassert_true(min <= max, "min bitrate must be lower than max bitrate");
+}
+
+/**
  * @brief Test setting a too high bitrate.
  */
 static void test_set_bitrate_too_high(void)
@@ -1010,6 +1036,7 @@ void test_main(void)
 	ztest_test_suite(can_api_tests,
 			 ztest_user_unit_test(test_get_core_clock),
 			 ztest_unit_test(test_set_state_change_callback),
+			 ztest_user_unit_test(test_set_bitrate_limits),
 			 ztest_user_unit_test(test_set_bitrate_too_high),
 			 ztest_user_unit_test(test_set_bitrate),
 			 ztest_user_unit_test(test_set_loopback),

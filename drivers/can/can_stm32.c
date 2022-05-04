@@ -460,6 +460,15 @@ static int can_stm32_get_core_clock(const struct device *dev, uint32_t *rate)
 	return 0;
 }
 
+static int can_stm32_get_min_bitrate(const struct device *dev, uint32_t *min_bitrate)
+{
+	const struct can_stm32_config *config = dev->config;
+
+	*min_bitrate = config->min_bitrate;
+
+	return 0;
+}
+
 static int can_stm32_get_max_bitrate(const struct device *dev, uint32_t *max_bitrate)
 {
 	const struct can_stm32_config *config = dev->config;
@@ -1149,6 +1158,7 @@ static const struct can_driver_api can_api_funcs = {
 #endif
 	.set_state_change_callback = can_stm32_set_state_change_callback,
 	.get_core_clock = can_stm32_get_core_clock,
+	.get_min_bitrate = can_stm32_get_min_bitrate,
 	.get_max_bitrate = can_stm32_get_max_bitrate,
 	.timing_min = {
 		.sjw = 0x1,
@@ -1189,6 +1199,7 @@ static const struct can_stm32_config can_stm32_cfg_1 = {
 	.config_irq = config_can_1_irq,
 	.pcfg = PINCTRL_DT_DEV_CONFIG_GET(DT_NODELABEL(can1)),
 	.phy = DEVICE_DT_GET_OR_NULL(DT_PHANDLE(DT_NODELABEL(can1), phys)),
+	.min_bitrate = DT_CAN_TRANSCEIVER_MIN_BITRATE(DT_NODELABEL(can1), 0), /* TODO */
 	.max_bitrate = DT_CAN_TRANSCEIVER_MAX_BITRATE(DT_NODELABEL(can1), 1000000),
 };
 
@@ -1257,6 +1268,7 @@ static const struct can_stm32_config can_stm32_cfg_2 = {
 	.config_irq = config_can_2_irq,
 	.pcfg = PINCTRL_DT_DEV_CONFIG_GET(DT_NODELABEL(can2)),
 	.phy = DEVICE_DT_GET_OR_NULL(DT_PHANDLE(DT_NODELABEL(can2), phys)),
+	.min_bitrate = DT_CAN_TRANSCEIVER_MIN_BITRATE(DT_NODELABEL(can2), 0), /* TODO */
 	.max_bitrate = DT_CAN_TRANSCEIVER_MAX_BITRATE(DT_NODELABEL(can2), 1000000),
 };
 

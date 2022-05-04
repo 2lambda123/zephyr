@@ -68,6 +68,7 @@ struct mcp2515_config {
 
 	/* CAN transceiver */
 	const struct device *phy;
+	uint32_t min_bitrate;
 	uint32_t max_bitrate;
 };
 

@@ -90,6 +90,7 @@ struct mcux_flexcan_config {
 	uint32_t phase_seg2;
 	void (*irq_config_func)(const struct device *dev);
 	const struct device *phy;
+	uint32_t min_bitrate;
 	uint32_t max_bitrate;
 #ifdef CONFIG_PINCTRL
 	const struct pinctrl_dev_config *pincfg;
@@ -140,6 +141,15 @@ static int mcux_flexcan_get_max_filters(const struct device *dev, enum can_ide i
 	ARG_UNUSED(id_type);
 
 	return CONFIG_CAN_MAX_FILTER;
+}
+
+static int mcux_flexcan_get_min_bitrate(const struct device *dev, uint32_t *min_bitrate)
+{
+	const struct mcux_flexcan_config *config = dev->config;
+
+	*min_bitrate = config->min_bitrate;
+
+	return 0;
 }
 
 static int mcux_flexcan_get_max_bitrate(const struct device *dev, uint32_t *max_bitrate)
@@ -792,6 +802,7 @@ static const struct can_driver_api mcux_flexcan_driver_api = {
 	.set_state_change_callback = mcux_flexcan_set_state_change_callback,
 	.get_core_clock = mcux_flexcan_get_core_clock,
 	.get_max_filters = mcux_flexcan_get_max_filters,
+	.get_min_bitrate = mcux_flexcan_get_min_bitrate,
 	.get_max_bitrate = mcux_flexcan_get_max_bitrate,
 	/*
 	 * FlexCAN timing limits are specified in the "FLEXCANx_CTRL1 field
@@ -859,6 +870,7 @@ static const struct can_driver_api mcux_flexcan_driver_api = {
 		.sample_point = DT_INST_PROP_OR(id, sample_point, 0),	\
 		.irq_config_func = mcux_flexcan_irq_config_##id,	\
 		.phy = DEVICE_DT_GET_OR_NULL(DT_INST_PHANDLE(id, phys)),\
+		.min_bitrate = DT_INST_CAN_TRANSCEIVER_MIN_BITRATE(id, 0), \ /* TODO */
 		.max_bitrate = DT_INST_CAN_TRANSCEIVER_MAX_BITRATE(id, 1000000), \
 		FLEXCAN_PINCTRL_INIT(id)				\
 	};								\

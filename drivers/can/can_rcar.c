@@ -183,6 +183,7 @@ struct can_rcar_cfg {
 	uint16_t sample_point;
 	const struct pinctrl_dev_config *pcfg;
 	const struct device *phy;
+	uint32_t min_bitrate;
 	uint32_t max_bitrate;
 };
 
@@ -1028,6 +1029,15 @@ static int can_rcar_get_max_filters(const struct device *dev, enum can_ide id_ty
 	return CONFIG_CAN_RCAR_MAX_FILTER;
 }
 
+static int can_rcar_get_min_bitrate(const struct device *dev, uint32_t *min_bitrate)
+{
+	const struct can_rcar_cfg *config = dev->config;
+
+	*min_bitrate = config->min_bitrate;
+
+	return 0;
+}
+
 static int can_rcar_get_max_bitrate(const struct device *dev, uint32_t *max_bitrate)
 {
 	const struct can_rcar_cfg *config = dev->config;
@@ -1050,6 +1060,7 @@ static const struct can_driver_api can_rcar_driver_api = {
 	.set_state_change_callback = can_rcar_set_state_change_callback,
 	.get_core_clock = can_rcar_get_core_clock,
 	.get_max_filters = can_rcar_get_max_filters,
+	.get_min_bitrate = can_rcar_get_min_bitrate,
 	.get_max_bitrate = can_rcar_get_max_bitrate,
 	.timing_min = {
 		.sjw = 0x1,

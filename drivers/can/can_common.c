@@ -213,9 +213,18 @@ int z_impl_can_set_bitrate(const struct device *dev, uint32_t bitrate, uint32_t 
 #ifdef CONFIG_CAN_FD_MODE
 	struct can_timing timing_data;
 #endif /* CONFIG_CAN_FD_MODE */
+	uint32_t min_bitrate;
 	uint32_t max_bitrate;
 	uint16_t sample_pnt;
 	int ret;
+
+	ret = can_get_min_bitrate(dev, &min_bitrate);
+	if (ret == -ENOSYS) {
+		/* Minimum bitrate unknown */
+		min_bitrate = 0;
+	} else if (ret < 0) {
+		return ret;
+	}
 
 	ret = can_get_max_bitrate(dev, &max_bitrate);
 	if (ret == -ENOSYS) {
@@ -225,7 +234,7 @@ int z_impl_can_set_bitrate(const struct device *dev, uint32_t bitrate, uint32_t 
 		return ret;
 	}
 
-	if ((max_bitrate > 0) && (bitrate > max_bitrate)) {
+	if (bitrate < min_bitrate || ((max_bitrate > 0) && (bitrate > max_bitrate))) {
 		return -ENOTSUP;
 	}
 

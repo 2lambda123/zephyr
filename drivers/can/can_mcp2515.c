@@ -320,6 +320,15 @@ static int mcp2515_get_max_filters(const struct device *dev, enum can_ide id_typ
 	return CONFIG_CAN_MAX_FILTER;
 }
 
+static int mcp2515_get_min_bitrate(const struct device *dev, uint32_t *min_bitrate)
+{
+	const struct mcp2515_config *dev_cfg = dev->config;
+
+	*min_bitrate = dev_cfg->min_bitrate;
+
+	return 0;
+}
+
 static int mcp2515_get_max_bitrate(const struct device *dev, uint32_t *max_bitrate)
 {
 	const struct mcp2515_config *dev_cfg = dev->config;
@@ -841,6 +850,7 @@ static const struct can_driver_api can_api_funcs = {
 	.set_state_change_callback = mcp2515_set_state_change_callback,
 	.get_core_clock = mcp2515_get_core_clock,
 	.get_max_filters = mcp2515_get_max_filters,
+	.get_min_bitrate = mcp2515_get_min_bitrate,
 	.get_max_bitrate = mcp2515_get_max_bitrate,
 	.timing_min = {
 		.sjw = 0x1,
@@ -983,6 +993,7 @@ static const struct mcp2515_config mcp2515_config_1 = {
 	.osc_freq = DT_INST_PROP(0, osc_freq),
 	.sample_point = DT_INST_PROP_OR(0, sample_point, 0),
 	.phy = DEVICE_DT_GET_OR_NULL(DT_INST_PHANDLE(0, phys)),
+	.min_bitrate = DT_INST_CAN_TRANSCEIVER_MIN_BITRATE(0, 0), /* TODO */
 	.max_bitrate = DT_INST_CAN_TRANSCEIVER_MAX_BITRATE(0, 1000000),
 };
 

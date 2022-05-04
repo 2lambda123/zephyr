@@ -203,6 +203,7 @@ struct can_mcan_config {
 	uint8_t tx_delay_comp_offset;
 #endif
 	const struct device *phy;
+	uint32_t min_bitrate;
 	uint32_t max_bitrate;
 	const void *custom;
 };
@@ -229,6 +230,7 @@ struct can_mcan_reg;
 		.tx_delay_comp_offset =						\
 			DT_PROP(node_id, tx_delay_comp_offset),			\
 		.phy = DEVICE_DT_GET_OR_NULL(DT_PHANDLE(node_id, phys)),	\
+		.min_bitrate = DT_CAN_TRANSCEIVER_MIN_BITRATE(node_id, 0),	\ /* TODO */
 		.max_bitrate = DT_CAN_TRANSCEIVER_MAX_BITRATE(node_id, 5000000),\
 		.custom = _custom_config,					\
 	}
@@ -243,6 +245,7 @@ struct can_mcan_reg;
 			DT_PROP_OR(node_id, phase_seg1, 0),			\
 		.ts2 = DT_PROP_OR(node_id, phase_seg2, 0),			\
 		.phy = DEVICE_DT_GET_OR_NULL(DT_PHANDLE(node_id, phys)),	\
+		.min_bitrate = DT_CAN_TRANSCEIVER_MIN_BITRATE(node_id, 0),	\ /* TODO */
 		.max_bitrate = DT_CAN_TRANSCEIVER_MAX_BITRATE(node_id, 1000000),\
 		.custom = _custom_config,					\
 	}
@@ -289,6 +292,8 @@ int can_mcan_get_state(const struct device *dev, enum can_state *state,
 void can_mcan_set_state_change_callback(const struct device *dev,
 					can_state_change_callback_t callback,
 					void *user_data);
+
+int can_mcan_get_min_bitrate(const struct device *dev, uint32_t *min_bitrate);
 
 int can_mcan_get_max_bitrate(const struct device *dev, uint32_t *max_bitrate);
 

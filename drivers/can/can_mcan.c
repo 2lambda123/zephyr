@@ -1034,6 +1034,15 @@ void can_mcan_set_state_change_callback(const struct device *dev,
 	data->state_change_cb_data = user_data;
 }
 
+int can_mcan_get_min_bitrate(const struct device *dev, uint32_t *min_bitrate)
+{
+	const struct can_mcan_config *cfg = dev->config;
+
+	*min_bitrate = cfg->min_bitrate;
+
+	return 0;
+}
+
 int can_mcan_get_max_bitrate(const struct device *dev, uint32_t *max_bitrate)
 {
 	const struct can_mcan_config *cfg = dev->config;

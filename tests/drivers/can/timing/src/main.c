@@ -168,6 +168,8 @@ static void test_timing_values(const struct device *dev, const struct can_timing
 	int sp_err;
 	int err;
 
+	/* TODO: check min/max bitrate limits */
+
 	printk("testing bitrate %u, sample point %u.%u%% (%s): ",
 		test->bitrate, test->sp / 10, test->sp % 10, test->invalid ? "invalid" : "valid");
 

@@ -1102,6 +1102,8 @@ static void test_pwms(void)
 #define DT_DRV_COMPAT vnd_can_controller
 static void test_can(void)
 {
+	/* TODO */
+
 	/* DT_CAN_TRANSCEIVER_MAX_BITRATE */
 	zassert_equal(DT_CAN_TRANSCEIVER_MAX_BITRATE(TEST_CAN_CTRL_0, 1000000), 1000000, "");
 	zassert_equal(DT_CAN_TRANSCEIVER_MAX_BITRATE(TEST_CAN_CTRL_0, 5000000), 5000000, "");

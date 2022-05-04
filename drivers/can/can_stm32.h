@@ -78,6 +78,7 @@ struct can_stm32_config {
 	void (*config_irq)(CAN_TypeDef *can);
 	const struct pinctrl_dev_config *pcfg;
 	const struct device *phy;
+	uint32_t min_bitrate;
 	uint32_t max_bitrate;
 };
 

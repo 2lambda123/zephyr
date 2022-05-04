@@ -364,6 +364,12 @@ typedef int (*can_get_core_clock_t)(const struct device *dev, uint32_t *rate);
 typedef int (*can_get_max_filters_t)(const struct device *dev, enum can_ide id_type);
 
 /**
+ * @brief Callback API upon getting the minimum supported bitrate
+ * See @a can_get_min_bitrate() for argument description
+ */
+typedef int (*can_get_min_bitrate_t)(const struct device *dev, uint32_t *min_bitrate);
+
+/**
  * @brief Callback API upon getting the maximum supported bitrate
  * See @a can_get_max_bitrate() for argument description
  */
@@ -382,6 +388,7 @@ __subsystem struct can_driver_api {
 	can_set_state_change_callback_t set_state_change_callback;
 	can_get_core_clock_t get_core_clock;
 	can_get_max_filters_t get_max_filters;
+	can_get_min_bitrate_t get_min_bitrate;
 	can_get_max_bitrate_t get_max_bitrate;
 	/* Min values for the timing registers */
 	struct can_timing timing_min;
@@ -621,6 +628,30 @@ static inline int z_impl_can_get_core_clock(const struct device *dev, uint32_t *
 	const struct can_driver_api *api = (const struct can_driver_api *)dev->api;
 
 	return api->get_core_clock(dev, rate);
+}
+
+/**
+ * @brief Get minimum supported bitrate
+ *
+ * Get the minimum supported bitrate for the CAN controller/transceiver combination.
+ *
+ * @param dev Pointer to the device structure for the driver instance.
+ * @param[out] min_bitrate Minimum supported bitrate in bits/s
+ *
+ * @retval -EIO General input/output error.
+ * @retval -ENOSYS If this function is not implemented by the driver.
+ */
+__syscall int can_get_min_bitrate(const struct device *dev, uint32_t *min_bitrate);
+
+static inline int z_impl_can_get_min_bitrate(const struct device *dev, uint32_t *min_bitrate)
+{
+	const struct can_driver_api *api = (const struct can_driver_api *)dev->api;
+
+	if (api->get_min_bitrate == NULL) {
+		return -ENOSYS;
+	}
+
+	return api->get_min_bitrate(dev, min_bitrate);
 }
 
 /**

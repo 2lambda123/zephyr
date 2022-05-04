@@ -21,6 +21,7 @@
 		sample-point = <875>;
 
 		can-transceiver {
+			min-bitrate = <600000>;
 			max-bitrate = <1000000>;
 		};
 	};
