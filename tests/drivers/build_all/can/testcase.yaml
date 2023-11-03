@@ -19,3 +19,6 @@ tests:
   drivers.build_all.can.mcp251xfd:
     extra_args: SHIELD=mikroe_mcp2518fd_click
     platform_allow: lpcxpresso55s28
+  drivers.build_all.can.tja1145a:
+    extra_args: SHIELD=tja1145a_evb
+    platform_allow: frdm_k64f
