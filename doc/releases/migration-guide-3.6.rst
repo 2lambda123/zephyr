@@ -118,6 +118,10 @@ Device Drivers and Device Tree
      * - ``DT_INST_BUS_LABEL(inst)``
        - ``DT_PROP(DT_BUS(DT_DRV_INST(inst)), label)``
 
+* The ``CAN_FILTER_FDF`` flag for filtering classic CAN/CAN FD frames was removed since no known CAN
+  controllers implement support for this. Applications can still filter on classic CAN/CAN FD frames
+  in their receive callback functions as needed.
+
 Power Management
 ================
 
