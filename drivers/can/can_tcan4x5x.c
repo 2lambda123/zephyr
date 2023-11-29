@@ -292,6 +292,7 @@ static int tcan4x5x_write(const struct device *dev, uint16_t addr, const void *s
 	const struct can_mcan_config *mcan_config = dev->config;
 	const struct tcan4x5x_config *tcan_config = mcan_config->custom;
 	size_t len32 = len / sizeof(uint32_t);
+	/* TODO: MISRA sane */
 	uint32_t src32[len32];
 	uint8_t cmd[4] = {CAN_TCAN4X5X_WRITE_B_FL, addr >> 8U & 0xFF, addr & 0xFF,
 			  len32 == 256 ? 0U : len32};

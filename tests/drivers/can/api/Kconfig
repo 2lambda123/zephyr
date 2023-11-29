@@ -1,0 +1,11 @@
+# Copyright 2023 Vestas Wind Systems A/S
+#
+# SPDX-License-Identifier: Apache-2.0
+
+source "Kconfig.zephyr"
+
+config TEST_CAN_API_MAX_FILTER_IDS
+	int "Maximum number of RX filter IDs"
+	default 255
+	help
+	  Maximum number of CAN RX filter IDs supported by the tests.

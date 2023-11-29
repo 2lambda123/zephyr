@@ -571,6 +571,7 @@ ZTEST(can_classic, test_add_filter)
  */
 static void add_remove_max_filters(bool ide)
 {
+	int filter_ids[CONFIG_TEST_CAN_API_MAX_FILTER_IDS];
 	uint32_t id_mask = ide ? CAN_EXT_ID_MASK : CAN_STD_ID_MASK;
 	struct can_filter filter = {
 		.flags = CAN_FILTER_DATA | (ide ? CAN_FILTER_IDE : 0),
@@ -591,8 +592,8 @@ static void add_remove_max_filters(bool ide)
 	}
 
 	zassert_true(max > 0, "failed to get max filters (err %d)", max);
-
-	int filter_ids[max];
+	zassert_true(max <= ARRAY_SIZE(filter_ids),
+		     "insufficient number of filter ID array entries");
 
 	for (i = 0; i < max; i++) {
 		filter.id++;
